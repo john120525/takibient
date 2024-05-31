@@ -1,0 +1,839 @@
+@charset "utf-8";
+
+@use 'reset';
+@use 'mixin' as mixin;
+
+// 全体設定
+html {
+  font-size: 62.5%;
+
+  body {
+    font-family: "Noto Serif JP", serif;
+    color: #333;
+  }
+
+  a {
+    transition: all 0.5s;
+  }
+
+  a:hover {
+    opacity: 0.7;
+  }
+
+  img {
+    width: 100%;
+  }
+
+  p {
+    font-size: 1.3rem;
+
+    @include mixin.tab {
+      font-size: 1.0rem;
+    }
+  }
+
+  .fadein {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 1s;
+  }
+}
+
+.wrapper {
+  max-width: 1820px;
+  margin: 0 auto;
+  padding: 0 4%;
+  gap: 32px;
+  width: 100%;
+  display: flex;
+
+  @include mixin.tab {
+    display: block;
+  }
+}
+
+// ローディングアニメーション
+#splash {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  background: #fff;
+  text-align: center;
+  color: #333;
+
+  #splash-logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+  }
+
+  img {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+  }
+
+}
+
+.fadeUp {
+  animation-name: fadeUpAnime;
+  animation-duration: 3.0s;
+  animation-fill-mode: forwards;
+  opacity: 0;
+}
+
+@keyframes fadeUpAnime {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+
+// ヘッダー
+header {
+  height: 80px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  // top: -80px;
+  background-color: #fff;
+  z-index: 30;
+
+  .wrapper {
+    display: flex;
+    align-items: center;
+    height: 80px;
+    justify-content: space-between;
+    position: relative;
+  }
+}
+
+h1 {
+  width: auto;
+
+  a {
+    font-size: 4.0rem;
+  }
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.global-nav {
+  display: flex;
+  gap: 40px;
+
+  @include mixin.pc {
+    display: none
+  }
+
+  a {
+    font-size: 1.3rem;
+  }
+}
+
+.wave-group  {
+  position: relative;
+
+  @include mixin.pc {
+    display: none;
+  }
+
+  .input {
+    font-size: 1.5rem;
+    padding: 10px 10px 5px 5px;
+    display: block;
+    width: 200px;
+    border: none;
+    border-bottom: 1px solid #333;
+    background: transparent;  
+  }
+
+  input:focus {
+    outline: none;
+  }
+
+  .label {
+    color: #333;
+    opacity: 0.5;
+    font-size: 1.3rem;
+    font-weight: normal;
+    position: absolute;
+    pointer-events: none;
+    left: 5px;
+    top: 10px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;  
+  }
+
+  .label-char {
+    -webkit-transition: 0.2s ease all;
+    transition: 0.2s ease all;
+    -webkit-transition-delay: calc(var(--index) * .05s);
+            transition-delay: calc(var(--index) * .05s);
+  
+  }
+
+  .input:focus ~ label .label-char,
+  .input:valid ~ label .label-char {
+    -webkit-transform: translateY(-20px);
+    -ms-transform: translateY(-20px);
+        transform: translateY(-20px);
+    font-size: 1.3rem;
+    color: #333;
+  }
+
+  .bar {
+    position: relative;
+    display: block;
+    width: 200px;  
+  }
+
+  .bar::before,.bar::after {
+    content: '';
+    height: 2px;
+    width: 0;
+    bottom: 1px;
+    position: absolute;
+    transition: 0.2s ease all;
+    -moz-transition: 0.2s ease all;
+    -webkit-transition: 0.2s ease all;  
+  }
+
+  .bar::before {
+    left: 50%;
+  }
+
+  .bar::after {
+    right: 50%;
+  }
+
+  .input:focus ~ .bar:before,
+  .input:focus ~ .bar:after {
+    width: 50%;
+  }
+}
+
+.toggle-btn {
+  width: 30px;
+  height: 30px;
+  position: relative;
+  z-index: 50;
+  cursor: pointer;
+  display: none;
+
+  @include mixin.pc {
+    display: block;
+  }
+
+  span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: #333;
+    position: absolute;
+    transition: all 0.5s;
+  }
+
+  span:nth-child(1) {
+    top: 25%;
+  }
+  span:nth-child(2) {
+    top: 50%;
+  }
+
+  span:nth-child(3) {
+    top: 75%;
+  }
+}
+
+.open {
+  .toggle-btn span:nth-child(1) {
+    top: 50%;
+    transform: rotate(-315deg);
+  }
+
+  .toggle-btn span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .toggle-btn span:nth-child(3) {
+    top: 50%;
+    transform: rotate(315deg);
+  }
+}
+
+.modal-nav {
+  width: 300px;
+  position: fixed;
+  padding: 64px 24px;
+  z-index: 15;
+  background-color: #fff;
+  height: 100%;
+  top: 0;
+  right: -300px;
+  opacity: 0;
+  transition: all 0.5s;
+  color: #333;
+
+  ul {
+
+    li {
+      z-index: 20;
+      font-size: 1.4rem;
+      color: #333;
+      margin-top: 32px;
+    }
+
+    li:nth-child(1) {
+      margin-top: 0;
+    }
+  }
+}
+
+.open {
+  .modal-nav {
+    opacity: 1;
+    right: 0;
+  }
+}
+
+.mask {
+  display: none;
+  transition: all 0.5s;
+}
+
+.open {
+  .mask {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0.8;
+    z-index: 10;
+    cursor: pointer;
+  }
+}
+
+// メインビジュアル
+
+.slider {
+  position: relative;
+  height: 100%;
+
+  .slider-item {
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+
+  .slider-item01 {
+    background-image: url("/img/mainvisual1.jpg");
+  }
+
+  .slider-item02 {
+    background-image: url("/img/mainvisual2.jpg");
+  }
+
+  .slider-item03 {
+    background-image: url("/img/mainvisual3.jpg");
+  }
+}
+
+.slick-prev,
+.slick-next {
+  position: absolute;
+  z-index: 3;
+  top: 42%;
+  cursor: pointer;
+  outline: none;
+  border-top: 2px solid #fff;
+  border-right: 2px solid #fff;
+  height: 25px;
+  width: 25px;
+}
+
+.slick-prev {
+  left: 2.5%;
+  transform: rotate(-135deg);
+}
+
+.slick-next {
+  right: 2.5%;
+  transform: rotate(45deg);
+}
+
+.slick-dots {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  margin: -50px 0 0 0;
+
+  li {
+    display: inline-block;
+    margin: 0 5px;
+  }
+
+  button {
+    color: transparent;
+    outline: none;
+    width: 8px;
+    height: 8px;
+    display: block;
+    border-radius: 50%;
+    background: #fff;
+  }
+}
+
+.slick-dots .slick-active button {
+  background: #333;
+}
+
+// レイアウト
+
+main {
+  width: 75%;
+  margin-top: 120px;
+
+  @include mixin.tab {
+    width: 100%;
+  }
+}
+
+aside {
+  width: 25%;
+  margin-top: 120px;
+
+  @include mixin.tab {
+    width: 100%;
+  }
+}
+
+// メインコンテンツ
+
+.main-contents {
+  width: 100% !important;
+}
+
+.item {
+  width: calc((100% - 16px)/ 2);
+  margin-bottom: 32px;
+  gap: 16px;
+
+  @include mixin.tab {
+    width: 100%;
+  }
+  @include mixin.sp {
+    width: 100%;
+  }
+
+  a {
+    img {
+      width: 100%;
+    }
+
+    p {
+      font-size: 1.3rem;
+      margin-top: 8px;
+
+      @include mixin.tab {
+        font-size: 1.0rem;
+      }
+    }
+
+    h3 {
+      font-size: 2.0rem;
+      padding: 8px 0 24px;
+      border-bottom: 1px solid #ccc;
+
+      @include mixin.tab {
+        font-size: 1.7rem;
+      }
+    }
+  }
+
+  a:hover {
+    opacity: 1;
+  }
+}
+
+article::after {
+  content: "";
+  background-color: #ccc;
+}
+
+// プロフィール
+.profile {
+  text-align: center;
+
+  .picture {
+    position: relative;
+
+    .author-pic {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translate(-50% , -50%);
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+      border: 3px solid #fff;
+      object-fit: cover;
+    }
+  }
+
+  .profile-contents {
+    text-align: center;
+    margin-top: 64px;
+
+    .name {
+      font-size: 2.0rem;
+      padding: 0 8px;
+    }
+    .profile-text {
+      text-align: left;
+      margin-top: 16px;
+      letter-spacing: 0.5px;
+      line-height: 1.6;
+      padding: 0 8px;
+
+      @include mixin.tab {
+        font-size: 1.2rem;
+      }
+    }
+  }
+}
+
+// ピックアップ
+
+.pick-up {
+  margin-top: 64px;
+  text-align: center;
+
+  h4 {
+    font-size: 2.0rem;
+  }
+}
+
+.pick-up-list {
+  margin-top: 48px;
+
+
+
+  img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    height: auto;
+    object-fit: cover;
+    margin-top: 16px;
+
+    @include mixin.tab {
+      height: auto;
+    }
+  }
+
+  p {
+    font-size: 1.3rem;
+    text-align: left;
+    margin-top: 8px;
+
+    @include mixin.tab {
+      font-size: 1.0rem;
+    }
+  }
+
+  h5 {
+    font-size: 1.8rem;
+    text-align: left;
+    margin-top: 8px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 24px;
+
+    @include mixin.tab {
+      font-size: 1.7rem;
+    }
+  }
+}
+
+.pick-up-list:nth-of-type(1) {
+  margin-top: 24px;
+}
+
+// フッター
+
+footer {
+  text-align: center;
+  padding: 64px 0 16px;
+  margin-top: 120px;
+
+  .container {
+    max-width: 1820px;
+    margin: 0 4%;
+    border-top: 1px solid #ccc;
+    padding-top: 48px;
+
+    .footer-logo {
+      font-size: 4.0rem;
+    }
+  
+    .footer-nav {
+      display: flex;
+      gap: 32px;
+      margin-top: 32px;
+      justify-content: center;
+    }
+  
+    .copyright {
+      margin-top: 32px;
+      font-size: 1.0rem;
+    }
+  }
+}
+
+// アバウトページ
+
+.page-about {
+  text-decoration: underline;
+
+}
+
+.about-contents {
+
+  img {
+    object-fit: cover;
+  }
+
+  .about-text {
+    h2 {
+      font-size: 2.4rem;
+      margin-top: 32px;
+    }
+    .comment {
+      font-size: 1.5rem;
+      margin-top: 32px;
+      line-height: 1.7;
+    }
+
+    .keyword {
+      font-size: 1.5rem;
+      margin-top: 32px;
+      line-height: 1.7;
+    }
+
+    .introduce {
+      font-size: 1.5rem;
+      margin-top: 32px;
+      line-height: 1.7;
+    }
+  }
+}
+
+// キャンピングページ
+.page-camping {
+  text-decoration: underline;
+}
+
+.page-lifestyle {
+  text-decoration: underline;
+}
+
+.page-notice {
+  text-decoration: underline;
+}
+
+.page-contact {
+  text-decoration: underline;
+}
+
+
+// シングルページ
+
+.small-wrapper {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 4%;
+  gap: 64px;
+  width: 100%;
+  display: flex;
+
+  @include mixin.tab {
+    display: block;
+  }
+}
+
+
+.single-contents {
+
+  .category {
+    font-size: 1.0rem;
+  }
+
+  .date {
+    font-size: 1.0rem;
+    margin-top: 8px;
+  }
+
+  .page-title {
+    font-size: 2.4rem;
+    margin-top: 16px;
+  }
+
+  .page-img {
+    margin-top: 16px;
+  }
+
+  .page-contents {
+    font-size: 1.5rem;
+    margin-top: 32px;
+    letter-spacing: 0.8px;
+    line-height: 1.6;
+  }
+
+  .page-head3 {
+    font-size: 2.0rem;
+    margin: 56px 0 32px;
+    position: relative;
+    padding-left: 8px;
+  }
+
+  .page-head3::after {
+    content: "";
+    background-color: #ccc;
+    height: 2px;
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 100%;
+  }
+
+}
+
+.contact {
+  margin-top: 120px;
+  width: 70%;
+
+  .contact-title {
+    font-size: 3.6rem;
+    margin-bottom: 80px;
+  }
+
+}
+
+form {
+  width: 100%;
+}
+.contact-form {
+  width: 100%;
+  margin-top: 64px;
+
+  dt {
+    width: 100%;
+    margin: 32px 0 4px;
+    font-size: 1.5rem;
+    font-weight: normal;
+  }
+
+  dd {
+    width: 100%;
+    padding: 8px 4px;
+  }
+}
+
+input {
+  border: 1px solid #ccc;
+  width: 100%;
+  padding: 16px 4px;
+  font-size: 1.5rem;
+}
+
+input::placeholder {
+  opacity: 0.5;
+  font-size: 1.2rem;
+}
+
+textarea {
+  border: 1px solid #ccc;
+  width: 100%;
+  padding: 16px 4px;
+  font-size: 1.5rem;
+  resize: vertical;
+}
+
+textarea::placeholder {
+  opacity: 0.5;
+  font-size: 1.2rem;
+}
+
+.submit {
+  position: relative;
+  display: inline-block;
+  padding: 16px 64px;
+  border: 1px solid #212121;
+  text-transform: uppercase;
+  color: #212121;
+  text-decoration: none;
+  font-weight: normal;
+  font-size: 1.5rem;
+  margin: 56px 0 0 4px;
+}
+
+a.submit::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: -2px;
+  width: calc(100% + 4px);
+  height: calc(100% - 12px);
+  background-color: #fff;
+  transition: 0.3s ease-in-out;
+  transform: scaleY(1);
+}
+
+.submit:hover::before {
+  transform: scaleY(0);
+}
+
+.submit::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: -2px;
+  height: calc(100% + 4px);
+  width: calc(100% - 12px);
+  background-color: #fff;
+  transition: 0.3s ease-in-out;
+  transform: scaleX(1);
+  transition-delay: 0.5s;
+}
+
+.submit:hover::after {
+  transform: scaleX(0);
+}
+
+.submit span {
+  position: relative;
+  z-index: 3;
+}
+
+button {
+  background-color: none;
+  text-decoration: none;
+  background-color: #fff;
+  border: none;
+  width: 100%;
+  text-align: center;
+}
